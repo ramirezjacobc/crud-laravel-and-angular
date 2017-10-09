@@ -89,6 +89,7 @@
             <div class="control is-expanded">
       				<input type="text" class="input is-fullwidth" placeholder="Published date" ng-model="newBook.published_date" name="published_date" required>
       				<span class="error" ng-show="newBookForm.$submitted && newBookForm.published_date.$error.required">Field required</span>
+              <span class="error" ng-show="invalidDate">Date format incorrect</span>
       			</div>
           </div>
 

@@ -8,6 +8,7 @@ app.controller('BookController',
   vm.categories = $rootScope.categoriesB;
 	vm.view = 'list';
 	vm.newBook = {};
+  vm.invalidDate = false;
 
 	vm.changeView = function(type, id = null) {
     var index = $filter('getIndexById')(vm.books, id);
@@ -15,7 +16,18 @@ app.controller('BookController',
 		vm.newBook = id === null ? {} : vm.books[index];
 	}
 
+  vm.isValidDate = function() {
+    var regEx = /^\d{4}-\d{2}-\d{2}$/;
+    return vm.newBook.published_date.match(regEx) != null;
+  }
+
 	vm.addBook = function() {
+    if(!vm.isValidDate()) {
+      vm.invalidDate = true;
+      return false;
+    }
+
+    vm.invalidDate = false;
 		if(vm.newBook.id) {
 			vm.updateBook();
 		}else{
