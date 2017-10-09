@@ -1,0 +1,117 @@
+<nav class="breadcrumb" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="#">Books</a></li>
+    <li class="is-active"><a href="#" aria-current="page">List</a></li>
+  </ul>
+</nav>
+
+<nav class="panel">
+  <p class="panel-heading">
+    <button class="button is-primary" ng-hide="view != 'list'"  ng-click="changeView('newOrEdit')">Add book</button>
+		<button class="button is-danger" ng-hide="view == 'list'" ng-click="changeView('list')">Cerrar</button>
+  </p>
+
+  <div class="panel-block is-active">
+    <div style="width: 100%;">
+      <div class="" ng-if="view == 'list' && books.length > 0">
+        <table ng-table="tableParams" class="table  is-striped">
+          <tr class="" ng-repeat="book in $data">
+    				<td data-title="'Name'" filter="{ name: 'text'}">{{ book.name }}</td>
+    				<!--<td data-title="'Description'">{{ book.description }}</td>-->
+    				<td data-title="'Author'" filter="{ author: 'text'}">{{ book.author }}</td>
+    				<td data-title="'Available'">
+              <a class="btn btn-success">
+                <button  class="button {{ book.available ? 'is-success' : 'is-danger'}}" ng-click="changeStatus(book.id)">
+                  {{ book.available ? 'Available' : 'Not available' }}
+                </button>
+    					</a>
+    				</td>
+            <td data-title="'User'" filter="{ user: 'text'}">{{ book.user }}</td>
+            <td data-title="'Category'" filter="{ category: 'text'}">
+              <strong>Name: </strong> {{ book.category.name }}<br />
+              <strong>Description: </strong>{{ book.category.description }}
+            </td>
+            <td data-title="'Published date'">{{ book.published_date | date }}</td>
+            <td data-title="'Actions'">
+              <button class="button is-info" ng-click="changeView('newOrEdit', book.id)">
+    					  edit
+    					</button>
+              <button class="button is-danger" ng-click="deleteBook(book.id)">
+    					  delete
+    					</button>
+    				</td>
+    	    </tr>
+        </table>
+    	</div>
+
+      <div class="alert alert-danger" ng-if="books.length == 0 && view == 'list'">
+    		Aún no hay pedidos
+    	</div>
+
+
+    	<div ng-if="view == 'newOrEdit'">
+        <form ng-submit="newBookForm.$valid && addBook()"  name="newBookForm" novalidate>
+          <div class="field">
+      			<div class="control is-expanded">
+      				<input type="text" class="input is-fullwidth" placeholder="Name" ng-model="newBook.name" name="name" minlength="5" maxlength="100" required>
+      				<span class="error" ng-show="newBookForm.$submitted && newBookForm.name.$error.required">Field required</span>
+      				<span class="error" ng-show="newBookForm.$submitted && newBookForm.name.$error.minlength">5 characters</span>
+      				<span class="error" ng-show="newBookForm.$submitted && newBookForm.name.$error.maxlength">100 characters</span>
+      			</div>
+          </div>
+
+          <div class="field">
+            <div class="control is-expanded">
+      				<textarea class="textarea is-fullwidth" placeholder="Description" ng-model="newBook.description" name="description" required></textarea>
+      				<span class="error" ng-show="newBookForm.$submitted && newBookForm.description.$error.required">Field required</span>
+      			</div>
+          </div>
+
+          <div class="field">
+            <div class="control is-expanded">
+      				<input type="text" class="input is-fullwidth" placeholder="Author" ng-model="newBook.author" name="author" minlength="5" maxlength="100" required>
+      				<span class="error" ng-show="newBookForm.$submitted && newBookForm.author.$error.required">Field required</span>
+      				<span class="error" ng-show="newBookForm.$submitted && newBookForm.author.$error.minlength">5 characters</span>
+      				<span class="error" ng-show="newBookForm.$submitted && newBookForm.author.$error.maxlength">100 characters</span>
+      			</div>
+          </div>
+
+          <div class="field">
+            <div class="control is-expanded">
+      				<input type="text" class="input is-fullwidth" placeholder="User" ng-model="newBook.user" name="user" minlength="5" maxlength="100" required>
+      				<span class="error" ng-show="newBookForm.$submitted && newBookForm.user.$error.required">Field required</span>
+      				<span class="error" ng-show="newBookForm.$submitted && newBookForm.user.$error.minlength">5 characters</span>
+      				<span class="error" ng-show="newBookForm.$submitted && newBookForm.user.$error.maxlength">100 characters</span>
+      			</div>
+          </div>
+
+          <div class="field">
+            <div class="control is-expanded">
+      				<input type="text" class="input is-fullwidth" placeholder="Published date" ng-model="newBook.published_date" name="published_date" required>
+      				<span class="error" ng-show="newBookForm.$submitted && newBookForm.published_date.$error.required">Field required</span>
+      			</div>
+          </div>
+
+          <div class="field">
+            <div class="control is-expanded">
+              <select class="select is-fullwidth" ng-options="category.id as category.name for category in categories" ng-model="newBook.category_id" ng-change="updateCategory(newBook.category_id)">
+      					<option value="">Select a category</option>
+      				</select>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="control is-expanded">
+              Available:
+      				<input type="checkbox" class="checkbox"  ng-model="newBook.available" value="1" ng-checked="newBook.available == 1">
+      			</div>
+          </div>
+
+    			<div class="">
+    				<button type="submit" class="button is-primary">Guardar</button>
+    			</div>
+    		</form>
+      </div>
+    </div>
+  </div>
+</nav>
